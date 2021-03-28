@@ -1,0 +1,47 @@
+<h1>Update Your Book</h1>
+<form [formGroup]="updateBookForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+    <div>Title</div>
+    <input type="text" class="form-control" placeholder="Enter title" formControlName="title">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.title.invalid">Book title is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+    <div>Authors</div>
+    <input type="text" class="form-control" placeholder="Enter authors(separate by ::)" formControlName="authors">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.authors.invalid">Author(s) is required</div>
+    </div><!-- form-group -->
+    
+    <div class="form-group">
+    <div>ISBN</div>
+    <input type="text" class="form-control" placeholder="Enter book ISBN" formControlName="ISBN">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.ISBN.invalid">ISBN is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+    <div>Publication Date</div>
+    <input type="Date" class="form-control" placeholder="Enter publication date" formControlName="publication_date">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.publication_date.invalid">Publication date is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+    <div>Quantity</div>
+    <input type="number" class="form-control" placeholder="Enter quantity" formControlName="quantity">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.quantity.invalid">Quantity is required</div>
+    </div><!-- form-group -->
+        
+    <div class="form-group">
+    <div>Price</div>
+    <input type="text" class="form-control" placeholder="Enter book price" formControlName="price">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.price.invalid">Price is required</div>
+    </div><!-- form-group -->
+   
+    <div *ngFor='let url of this.updatedBook.image_tokens' style="display: inline-block;">
+    <img [src]="url" height="200px" width="150px" style="margin: 3px;"> <br/>
+    <a style="display: block;" (click)="RemoveImage(url)">Remove</a>
+    </div>
+
+
+    
+    <button style="display: block;">Update</button>
+</form>

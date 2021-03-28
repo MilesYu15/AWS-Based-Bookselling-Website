@@ -1,0 +1,27 @@
+
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="First Name" formControlName="firstname">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.firstname.invalid">First name is required</div>
+    </div><!-- form-group -->
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="Last Name" formControlName="lastname">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.lastname.invalid">Last name is required</div>
+    </div><!-- form-group -->
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="Enter your email" formControlName="email">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.email.invalid">Email is required</div>
+    </div><!-- form-group -->
+    <div class="form-group">
+    <input type="password" class="form-control" placeholder="Enter your password" formControlName="password">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.password.invalid"> 
+        At least 8 characters—the more characters, the better.
+        A mixture of both uppercase and lowercase letters.
+        A mixture of letters and numbers.
+        Inclusion of at least one special character, e.g., ! @ # ? ]
+    </div>
+    </div><!-- form-group -->
+
+    <button>Register</button>
+</form>
+<p>Already have an account? <a href="login">Sign In</a></p>

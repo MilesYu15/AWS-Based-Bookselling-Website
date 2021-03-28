@@ -1,0 +1,14 @@
+<div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter your email" formControlName="email">
+        </div><!-- form-group -->
+        <div class="form-group">
+            <input type="password" class="form-control" formControlName="password" placeholder="Enter your password">
+        </div><!-- form-group -->
+        <button class="btn btn-primary btn-block btn-signin" [disabled]="loginForm.invalid">Login</button>
+        <p class="mg-b-0">Don't have an account? <a routerLink="/signup">Sign Up</a></p>
+        <p class="mg-b-0">Forget your password? <a routerLink="/reset">Reset Password</a></p>
+    </form>
+</div><!-- signin-wrapper -->
+<div>{{serverUrl}}</div>

@@ -1,0 +1,14 @@
+[Unit]
+Description=Webapp server
+Documentation=https://example.com
+After=network.target
+
+[Service]
+EnvironmentFile=/home/ubuntu/server.env
+Type=simple
+User=ubuntu
+ExecStart=/usr/bin/node /home/ubuntu/server/server.js > /home/ubuntu/server/server.log 2>&1 &
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

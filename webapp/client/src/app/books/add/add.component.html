@@ -1,0 +1,49 @@
+<form [formGroup]="addBookForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="Enter title" formControlName="title">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.title.invalid">Book title is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="Enter authors(separate by ::)" formControlName="authors">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.authors.invalid">Author(s) is required</div>
+    </div><!-- form-group -->
+    
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="Enter book ISBN" formControlName="ISBN">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.ISBN.invalid">ISBN is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+    <input type="Date" class="form-control" placeholder="Enter publication date" formControlName="publication_date">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.publication_date.invalid">Publication date is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+    <input type="number" class="form-control" placeholder="Enter quantity" formControlName="quantity">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.quantity.invalid">Quantity is required</div>
+    </div><!-- form-group -->
+        
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="Enter book price" formControlName="price">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.price.invalid">Price is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+        <label for="file">File</label>
+        <input 
+            formControlName="file"
+            id="file" 
+            type="file" 
+            class="form-control"
+            multiple="" 
+            (change)="onFileChange($event)">
+        <div *ngIf="formControls.file.touched && formControls.file.invalid" class="alert alert-danger">
+            <div *ngIf="formControls.file.errors.required">File is required.</div>
+        </div>
+    </div>
+   
+    <img *ngFor='let url of images'  [src]="url" height="200px" width="150px" style="margin: 3px;"> <br/>
+
+    <button>Add</button>
+</form>

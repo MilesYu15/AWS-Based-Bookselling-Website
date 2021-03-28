@@ -1,0 +1,20 @@
+
+<form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="{{currentUser.firstname}}" formControlName="firstname">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.firstname.invalid">First name is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+    <input type="text" class="form-control" placeholder="{{currentUser.lastname}}" formControlName="lastname">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.lastname.invalid">Last name is required</div>
+    </div><!-- form-group -->
+
+    <div class="form-group">
+    <input type="password" class="form-control" placeholder="Enter your new password" formControlName="password">
+    <div class="validation-feedback" *ngIf="submitted && this.formControls.password.invalid"> Password has to be at least digits or passwords</div>
+    </div><!-- form-group -->
+    
+    <button>Update</button>
+    <button routerLink="/home">Cancel</button>
+</form>

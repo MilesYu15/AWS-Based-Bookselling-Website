@@ -1,0 +1,34 @@
+<h2>All the books for sale</h2>
+    <button routerLink="/books/add">Add a book</button>
+    <button routerLink="/home">Home</button>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>ISBM</th>
+            <th>Publication Date</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Images</th>
+            <th>Actions</th>
+        </tr>
+
+        <tr *ngFor="let book of sortBy(books)">
+            <td>{{book.title}}</td>
+            <td>{{book.authors}}</td>
+            <td>{{book.ISBN}}</td>
+            <td>{{book.publication_date}}</td>
+            <td>{{book.quantity}}</td>
+            <td>{{book.price}}</td>
+            <td>
+                <img *ngFor='let image of book.image_tokens'  [src]="image" height="200px" width="150px" style="margin: 3px;"> <br/> 
+            </td>
+            <td>
+                <!-- <button [routerLink]="['/book/update', book.id]">Update</button> -->
+                <button *ngIf="book.owner==this.currentUser.email" (click)="updateBook(book)">Update</button>
+                <button *ngIf="book.owner==this.currentUser.email" (click)="deleteBook(book.id)">Delete</button>
+                <button *ngIf="book.owner!=this.currentUser.email" (click)="addToCart(book)">Add To Cart</button>
+            </td>
+        </tr>
+        
+    </table>

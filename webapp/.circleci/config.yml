@@ -1,0 +1,112 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2
+
+jobs:
+  #build the project
+  build:
+    working_directory: ~/webapp
+    docker:
+      - image: circleci/node:latest-browsers
+    steps:
+      - checkout
+
+      # Install the client dependencies (node_modules)
+      - run: cd client && npm install
+
+      # Save the client dependencies for other jobs
+      - save_cache:
+          key: webapp-client-{{ checksum "./client/package-lock.json" }}
+          paths:
+            - ./client/node_modules
+
+      # Build the client
+      - run: cd client && yarn ng build
+
+      # Install the server dependencies (node_modules)
+      - run: cd server && npm install
+
+      # Save the server dependencies for other jobs
+      - save_cache:
+          key: webapp-server-{{ checksum "./server/package-lock.json" }}
+          paths:
+            - ./server/node_modules
+
+  pr_check:
+    requires:
+      - build
+    working_directory: ~/webapp
+    docker:
+      - image: circleci/node:latest-browsers
+
+    steps:
+      - checkout
+
+      # Restore the client dependencies (node_modules)
+      - restore_cache:
+          key: webapp-client-{{ checksum "./client/package-lock.json" }}
+
+      # Run the client unit test
+      - run: cd client && npm run test -- --no-watch --no-progress --browsers=Firefox
+
+      # Restore the server dependencies (node_modules)
+      - restore_cache:
+          key: webapp-server-{{ checksum "./server/package-lock.json" }}
+
+  build_dist:
+    requires:
+      - build
+    working_directory: ~/webapp
+    docker:
+      - image: circleci/node:latest-browsers
+    steps:
+      - checkout
+
+      # Restore the client dependencies (node_modules)
+      - restore_cache:
+          key: webapp-client-{{ checksum "./client/package-lock.json" }}
+
+      - run: 
+          name: Build Dist
+          command: cd client && yarn ng build --no-watch
+      - run:
+          name: Zip 
+          command: |
+            zip -r webapp-${CIRCLE_BUILD_NUM}.zip client/dist/webclient/* codedeploy/* server/*
+            zip webapp-${CIRCLE_BUILD_NUM}.zip codedeploy/.htaccess
+            zip -j webapp-${CIRCLE_BUILD_NUM}.zip appspec.yml
+            zip -j webapp-${CIRCLE_BUILD_NUM}.zip cloudwatch-config.json
+      - run: ls -al 
+      - run: 
+          name: Install AWS cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            aws --version
+      - run: 
+          name: Copy Artifact to S3
+          command: |
+            aws s3 cp webapp-${CIRCLE_BUILD_NUM}.zip s3://codedeploy.jiachenyu.me --debug
+      - run:
+          name: CodeDeploy API call
+          command: |
+            sudo apt-get update && sudo apt-get install -yy less
+            export AWS_PAGER="less"
+            echo $AWS_PAGER
+            aws deploy create-deployment --application-name csye6225-webapp --s3-location "bucket=codedeploy.jiachenyu.me,key=webapp-${CIRCLE_BUILD_NUM}.zip,bundleType=zip" --deployment-group-name csye6225-webapp-deployment >> /dev/null
+
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      # Build the client and the server
+      - build
+
+      # Run the client unit test job
+      - pr_check:
+          requires:
+            - build
+      - build_dist:
+          requires:
+            - build

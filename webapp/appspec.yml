@@ -1,0 +1,36 @@
+version: 0.0
+os: linux
+
+files:
+  - source: ./client/dist/webclient/
+    destination: /home/ubuntu/client
+
+  - source: ./server/
+    destination: /home/ubuntu/server
+
+  - source: ./codedeploy/apache2.conf
+    destination: /home/ubuntu
+
+  - source: ./codedeploy/.htaccess
+    destination: /home/ubuntu
+
+  - source: ./codedeploy/webapp_server.service
+    destination: /home/ubuntu
+
+  - source: ./cloudwatch-config.json
+    destination: /home/ubuntu
+  
+hooks:
+  ApplicationStop:
+   - location: ./codedeploy/stop.sh
+     timeout: 180
+     runas: ubuntu
+  AfterInstall:
+   - location: ./codedeploy/afterinstall.sh
+     timeout: 180
+     runas: ubuntu
+  ApplicationStart:
+   - location: ./codedeploy/start.sh
+     timeout: 180
+     runas: ubuntu
+  

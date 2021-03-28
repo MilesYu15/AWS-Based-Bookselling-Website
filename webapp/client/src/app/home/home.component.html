@@ -1,0 +1,69 @@
+<h1>Your Personal Home</h1>
+
+<h2>User Information</h2>
+<div>Email: {{currentUser.email}}</div>
+<div>Firstname: {{currentUser.firstname}}</div>
+<div>Lastname: {{currentUser.lastname}}</div>
+<button routerLink="/update">Update</button>
+<button (click)="logout()">Logout</button>
+
+<h2>Your Books</h2>
+    <button routerLink="/books/add">Add A Book</button>
+    <button routerLink="/books/index">See All Books</button>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>ISBM</th>
+            <th>Publication Date</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Images</th>
+            <th>Actions</th>
+        </tr>
+
+        <tr *ngFor="let book of ownedBooks">
+            <td>{{book.title}}</td>
+            <td>{{book.authors}}</td>
+            <td>{{book.ISBN}}</td>
+            <td>{{book.publication_date}}</td>
+            <td>{{book.quantity}}</td>
+            <td>{{book.price}}</td>
+            <td>
+                <img *ngFor='let image of book.image_tokens'  [src]="image" height="200px" width="150px" style="margin: 3px;"> <br/> 
+            </td>
+            <td>
+                <!-- <button [routerLink]="['/book/update', book.id]">Update</button> -->
+                <button (click)="updateBook(book)">Update</button>
+                <button (click)="deleteBook(book.id)">Delete</button>
+            </td>
+        </tr>
+        
+    </table>
+
+<h2>Your Shopping Cart</h2>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>ISBM</th>
+            <th>Publication Date</th>
+            <th>Price</th>
+            <th>Images</th>
+            <th>Actions</th>
+        </tr>
+
+        <tr *ngFor="let cbook of cartBooks">
+            <td>{{cbook.title}}</td>
+            <td>{{cbook.authors}}</td>
+            <td>{{cbook.ISBN}}</td>
+            <td>{{cbook.publication_date}}</td>
+            <td>{{cbook.price}}</td>
+            <td>
+                <img *ngFor='let image of cbook.image_tokens'  [src]="image" height="200px" width="150px" style="margin: 3px;"> <br/> 
+            </td>
+            <td>
+                <button (click)="remove(cbook)">Remove</button>
+            </td>
+        </tr>
+    </table>

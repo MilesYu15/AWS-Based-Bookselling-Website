@@ -1,0 +1,11 @@
+<h1>Your Personal Home</h1>
+<div>You will receive an email with a link to reset your password!</div>
+<div>
+    <form [formGroup]="resetForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter your email" formControlName="email">
+            <div class="validation-feedback" *ngIf="submitted && this.formControls.email.invalid">Email is required</div>
+        </div><!-- form-group -->
+        <button>Send Email</button>
+    </form>
+</div><!-- signin-wrapper -->
