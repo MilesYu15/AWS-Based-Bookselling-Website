@@ -1,0 +1,57 @@
+{
+    "variables": {
+        "ami_users": "053325597395,442012749277",
+        "aws_access_key":"{{env `aws_access_key`}}",
+        "aws_secret_key":"{{env `aws_secret_key`}}",
+        "aws_region": "",
+        "subnet_id": "",
+        "source_ami": "",
+        "ssh_username": "ubuntu"
+    },
+    "builders": [
+        {
+            "type":"amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "{{user `aws_region`}}",
+            "instance_type": "t2.micro",
+            "subnet_id": "{{user `subnet_id`}}",
+            "source_ami": "{{user `source_ami`}}",
+            "ssh_username": "{{user `ssh_username`}}",
+            "ami_name": "csye6225_a4_{{timestamp}}",
+            "ami_users": "{{user `ami_users`}}",
+            "ami_description": "Ubuntu AMI for CSYE6225 - Summer 2020",
+            "launch_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "volume_size": 8,
+                    "volume_type": "gp2",
+                    "delete_on_termination": true
+                }
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt update",
+                "sudo apt update",
+                "sudo apt install apache2 -y",
+                "curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -",
+                "sudo apt update",
+                "sudo apt install nodejs -y",
+                "sudo apt-get install ruby -y",
+                "sudo apt-get install wget -y",
+                "cd /home/ubuntu",
+                "wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install",
+                "sudo chmod +x ./install",
+                "sudo ./install auto",
+                "sudo service codedeploy-agent start",
+                "sudo service codedeploy-agent status",
+                "wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb",
+                "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb"
+            ]
+        }
+    ]
+}
