@@ -1,0 +1,46 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2
+
+jobs:
+
+  build:
+    working_directory: ~/lambda
+    docker:
+      - image: circleci/node:latest-browsers
+    steps:
+      - checkout
+
+      - run: 
+          name: Install Dependencies
+          command: npm install
+
+      - run:
+          name: Zip 
+          command: |
+            zip -r lambda-${CIRCLE_BUILD_NUM}.zip node_modules
+            zip lambda-${CIRCLE_BUILD_NUM}.zip lambda_password_reset.js
+
+      - run: 
+          name: Install AWS cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            aws --version
+
+      - run: 
+          name: Copy Artifact to S3
+          command: |
+            aws s3 cp lambda-${CIRCLE_BUILD_NUM}.zip s3://lambda.jiachenyu.me --debug
+
+      - run:
+          name: Update Lambda Function
+          command: |
+            aws lambda update-function-code --function-name lambda_password_reset --s3-bucket lambda.jiachenyu.me --s3-key lambda-${CIRCLE_BUILD_NUM}.zip >> /dev/null
+
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
