@@ -1,6 +1,14 @@
 # AWS-Based-Bookselling-Website
 This application implements a simple bookselling app, in which a registered user can create, update, and view listings for books to sell. This application is designed to be deployed on AWS EC2 instances and use AWS Lambda for part of its business logic. It also uses Amazon Relational Database as its database and Amazon S3 for object storage. The CI/CD pipeline is set up on CircleCI. 
 
+## :trophy: Features
+ - Developed front-end layer using AngularJS, back-end layer using NodeJS framework, object storage using AWS S3, and data storage using MySQL on Amazon Relational Database Service
+ - Deployed the front-end and back-end layer on AWS EC2 instances with autoscaling capability
+ - Implemented AWS Lambda functions with Function as a service concept to send email notifications
+ - Applied Infrastructure as Code concept to create and manage infrastructure on AWS via Terraform and Github
+ - Incorporated CI/CD strategies using CircleCI and AWS CodeDeploy to automate the testing and deployment process for the server and lambda functions
+
+
 ## Application Components
 This repository includes the code for web application and setting up the necessary infrastructure on AWS
 
